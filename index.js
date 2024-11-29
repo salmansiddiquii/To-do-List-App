@@ -36,21 +36,18 @@ app.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    res.status(500).send("Internal Server Error");
   }
-
-  res.render("index.ejs", {
-    listTitle: "Today",
-    listItems: items,
-  });
 });
 
 app.post("/add", async (req, res) => {
   const item = req.body.newItem;
-  await db.query("INSERT INTO items (title) VALUES ($1)", [item]);
-  res.redirect("/");
   try {
+    await db.query("INSERT INTO items (title) VALUES ($1)", [item]);
+    res.redirect("/");
   } catch (error) {
     console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
